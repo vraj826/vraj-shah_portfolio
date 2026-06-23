@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Shield, Brain, Telescope, ArrowRight, ChevronRight } from 'lucide-react';
+import { Shield, Brain, Telescope, ArrowRight, ChevronRight, ExternalLink } from 'lucide-react';
 import { researchAreas } from '@/data/research';
 
 const categoryConfig = {
@@ -128,21 +128,29 @@ export default function Research() {
                     </ul>
                   </div>
 
-                  {/* Future topics */}
-                  <div className="mb-5">
+                  {/* Previous Work */}
+                  <div className="mb-5 flex-1">
                     <p className="text-xs text-hub-muted-2 uppercase tracking-widest mb-2 font-jetbrains" style={{ fontFamily: 'var(--font-jetbrains)' }}>
-                      Future Topics
+                      Previous Work
                     </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {area.futureTopics.map((t, i) => (
-                        <span
-                          key={i}
-                          className={`text-xs px-2 py-0.5 rounded-md border ${cfg.borderClass} ${cfg.bgClass} ${cfg.accentClass}`}
-                        >
-                          {t}
-                        </span>
+                    <ul className="flex flex-col gap-2">
+                      {area.previousWork.map((paper, i) => (
+                        <li key={i}>
+                          <a
+                            href={paper.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group/link flex items-start gap-1 text-xs text-hub-muted hover:text-hub-text transition-colors leading-relaxed"
+                          >
+                            <span className={`${cfg.accentClass} shrink-0 mt-0.5`}>•</span>
+                            <span className="underline decoration-white/10 group-hover/link:decoration-current transition-colors">
+                              {paper.title}
+                            </span>
+                            <ExternalLink size={10} className="shrink-0 mt-1 opacity-60 group-hover/link:opacity-100 transition-opacity" />
+                          </a>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
 
                   {/* Space card CTA */}

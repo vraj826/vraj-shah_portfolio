@@ -11,6 +11,7 @@ import { profile } from '@/data/profile';
 const navLinks = [
   { href: '#about', label: 'About' },
   { href: '#skills', label: 'Skills' },
+  { href: '#timeline', label: 'Journey' },
   { href: '#projects', label: 'Projects' },
   { href: '#opensource', label: 'Open Source' },
   { href: '#research', label: 'Research' },
@@ -72,10 +73,10 @@ export default function Navbar() {
             aria-label={`${profile.shortName} — Home`}
           >
             <div className="w-8 h-8 rounded-lg bg-hub-green/10 border border-hub-green/30 flex items-center justify-center group-hover:bg-hub-green/20 transition-colors">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" stroke="#00FF9D" strokeWidth="1.2" fill="none"/>
-                <rect x="6" y="9" width="4" height="1.5" rx="0.5" fill="#00FF9D"/>
-                <rect x="5.5" y="6" width="1.5" height="4" rx="0.5" fill="#00FF9D"/>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-hub-green" aria-hidden="true">
+                <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <ellipse cx="12" cy="12" rx="9" ry="3" stroke="#D4AF37" strokeWidth="1.2" transform="rotate(-30 12 12)" strokeDasharray="3,2" />
+                <circle cx="12" cy="12" r="2.5" fill="currentColor" />
               </svg>
             </div>
             <span
@@ -127,7 +128,7 @@ export default function Navbar() {
               title="Mission Control (M)"
             >
               <Rocket size={14} aria-hidden="true" />
-              <span className="hidden md:inline">Mission</span>
+              <span className="hidden md:inline">Mission [M]</span>
             </Link>
 
             {/* Terminal button */}
@@ -139,7 +140,7 @@ export default function Navbar() {
               title="Terminal (T)"
             >
               <Terminal size={14} aria-hidden="true" />
-              <span className="hidden md:inline">Terminal</span>
+              <span className="hidden md:inline">Terminal [T]</span>
             </button>
 
             {/* Mobile menu toggle */}

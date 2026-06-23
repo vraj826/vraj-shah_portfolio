@@ -29,16 +29,16 @@ export default function Home() {
           <Skills />
         </section>
 
+        <section id="timeline" className="section-padding">
+          <Timeline />
+        </section>
+
         <section id="projects" className="section-padding">
           <Projects />
         </section>
 
         <section id="opensource" className="section-padding">
           <OpenSource />
-        </section>
-
-        <section id="timeline" className="section-padding">
-          <Timeline />
         </section>
 
         <section id="certifications" className="section-padding">

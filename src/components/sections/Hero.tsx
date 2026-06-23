@@ -183,9 +183,8 @@ export default function Hero() {
                           <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-50 ${item.status === 'ONLINE' || item.status === 'ACTIVE' ? 'bg-hub-green' : 'bg-hub-blue'}`} />
                         )}
                         <span
-                          className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-                            item.status === 'STANDBY' ? 'bg-hub-muted-2' : item.status === 'ONLINE' || item.status === 'ACTIVE' ? 'bg-hub-green' : 'bg-hub-blue'
-                          }`}
+                          className={`relative inline-flex rounded-full h-1.5 w-1.5 ${item.status === 'STANDBY' ? 'bg-hub-muted-2' : item.status === 'ONLINE' || item.status === 'ACTIVE' ? 'bg-hub-green' : 'bg-hub-blue'
+                            }`}
                         />
                       </span>
                       <span
@@ -210,23 +209,6 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-hub-muted-2"
-        aria-hidden="true"
-      >
-        <span className="text-xs font-jetbrains tracking-widest" style={{ fontFamily: 'var(--font-jetbrains)' }}>SCROLL</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <ArrowDown size={16} />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

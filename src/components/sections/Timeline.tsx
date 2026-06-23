@@ -9,7 +9,6 @@ const typeConfig: Record<TimelineItem['type'], { icon: typeof GraduationCap; col
   opensource: { icon: Code2, color: 'text-hub-blue', bg: 'bg-hub-blue/10', border: 'border-hub-blue/30' },
   internship: { icon: Briefcase, color: 'text-hub-green', bg: 'bg-hub-green/10', border: 'border-hub-green/30' },
   research: { icon: FlaskConical, color: 'text-hub-blue', bg: 'bg-hub-blue/10', border: 'border-hub-blue/30' },
-  certification: { icon: Award, color: 'text-hub-green', bg: 'bg-hub-green/10', border: 'border-hub-green/30' },
   event: { icon: Calendar, color: 'text-hub-muted', bg: 'bg-white/5', border: 'border-white/15' },
   achievement: { icon: Award, color: 'text-hub-green', bg: 'bg-hub-green/10', border: 'border-hub-green/30' },
 };
@@ -33,7 +32,7 @@ export default function Timeline() {
         >
           <div className="flex items-center gap-3 mb-3">
             <span className="text-xs font-semibold text-hub-green/70 tracking-widest uppercase font-jetbrains" style={{ fontFamily: 'var(--font-jetbrains)' }}>
-              03 / Timeline
+              03 / Journey
             </span>
             <div className="flex-1 h-px bg-white/6 max-w-[80px]" />
           </div>
@@ -65,7 +64,7 @@ export default function Timeline() {
                   initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.05 }}
+                  transition={{ duration: 0.5, ease: 'easeOut' as const, delay: i * 0.05 }}
                   className={`relative flex items-start gap-6 ${
                     isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'
                   }`}

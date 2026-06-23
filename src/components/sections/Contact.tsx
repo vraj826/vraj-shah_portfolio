@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Github, Linkedin, Mail, Twitter, CheckCircle2, Loader2 } from 'lucide-react';
-import * as XLSX from 'xlsx';
+import { Send, Github, Linkedin, Mail, CheckCircle2, Loader2 } from 'lucide-react';
 import { profile } from '@/data/profile';
 
 interface FormData {
@@ -13,55 +12,48 @@ interface FormData {
   message: string;
 }
 
-function downloadToExcel(data: FormData) {
-  const timestamp = new Date().toISOString();
-  const row = {
-    Timestamp: timestamp,
-    Name: data.name,
-    Email: data.email,
-    Subject: data.subject,
-    Message: data.message,
-  };
-
-  const ws = XLSX.utils.json_to_sheet([row]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Messages');
-
-  // Column widths
-  ws['!cols'] = [
-    { wch: 24 }, // Timestamp
-    { wch: 20 }, // Name
-    { wch: 30 }, // Email
-    { wch: 30 }, // Subject
-    { wch: 60 }, // Message
-  ];
-
-  XLSX.writeFile(wb, `contact-message-${Date.now()}.xlsx`);
-}
-
 const socials = [
   { icon: Linkedin, label: 'LinkedIn', href: profile.socials.linkedin, hoverClass: 'hover:text-hub-blue hover:border-hub-blue/30 hover:bg-hub-blue/5' },
   { icon: Github, label: 'GitHub', href: profile.socials.github, hoverClass: 'hover:text-hub-text hover:border-white/20 hover:bg-white/5' },
-  { icon: Twitter, label: 'X / Twitter', href: profile.socials.twitter, hoverClass: 'hover:text-hub-text hover:border-white/20 hover:bg-white/5' },
   { icon: Mail, label: 'Email', href: `mailto:${profile.socials.email}`, hoverClass: 'hover:text-hub-green hover:border-hub-green/30 hover:bg-hub-green/5' },
 ];
 
 export default function Contact() {
   const [form, setForm] = useState<FormData>({ name: '', email: '', subject: '', message: '' });
   const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.name || !form.email || !form.subject || !form.message) {
+      setErrorMsg('Please fill in all required fields.');
+      return;
+    }
+
     setState('sending');
+    setErrorMsg('');
 
-    // Simulate brief processing
-    await new Promise((r) => setTimeout(r, 800));
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
 
-    // Download Excel with form data
-    downloadToExcel(form);
+      const data = await res.json();
 
-    setState('sent');
-    setForm({ name: '', email: '', subject: '', message: '' });
+      if (res.ok && data.success) {
+        setState('sent');
+        setForm({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setErrorMsg(data.error || 'Failed to establish connection. Please try again.');
+        setState('idle');
+      }
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+      setErrorMsg('Network error. Failed to establish connection.');
+      setState('idle');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -71,21 +63,20 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="section-padding relative z-10"
+      className="relative z-10"
       aria-label="Contact section"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header */}
+        {/* Header (Left-aligned) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55 }}
-          className="mb-12 text-center"
+          className="mb-12"
         >
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="flex-1 h-px bg-white/6 max-w-[80px]" />
+          <div className="flex items-center gap-3 mb-3">
             <span className="text-xs font-semibold text-hub-green/70 tracking-widest uppercase font-jetbrains" style={{ fontFamily: 'var(--font-jetbrains)' }}>
               09 / Contact
             </span>
@@ -97,12 +88,12 @@ export default function Contact() {
           >
             Establish Secure Connection
           </h2>
-          <p className="text-hub-muted mt-3 max-w-xl mx-auto leading-relaxed">
+          <p className="text-hub-muted mt-3 max-w-xl leading-relaxed">
             Got a question, collaboration idea, or just want to connect? I would love to hear from you.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl">
 
           {/* Form */}
           <motion.div
@@ -112,16 +103,16 @@ export default function Contact() {
             transition={{ duration: 0.55 }}
           >
             {state === 'sent' ? (
-              <div className="glass-card rounded-2xl p-8 flex flex-col items-center justify-center gap-4 text-center min-h-[400px]">
+              <div className="glass-card rounded-2xl p-8 flex flex-col items-center justify-center gap-4 text-center min-h-[380px]">
                 <CheckCircle2 size={40} className="text-hub-green" aria-hidden="true" />
                 <h3
                   className="font-semibold text-hub-text text-lg"
                   style={{ fontFamily: 'var(--font-space-grotesk)' }}
                 >
-                  Message Received
+                  Message Sent
                 </h3>
                 <p className="text-hub-muted text-sm">
-                  Your message has been saved. I will get back to you as soon as possible.
+                  Your message has been processed successfully. I will get back to you as soon as possible.
                 </p>
                 <button
                   onClick={() => setState('idle')}
@@ -138,6 +129,12 @@ export default function Contact() {
                 className="glass-card rounded-2xl p-6 flex flex-col gap-4"
                 aria-label="Contact form"
               >
+                {errorMsg && (
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-3 py-2.5 rounded-lg">
+                    {errorMsg}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="contact-name" className="text-xs text-hub-muted font-jetbrains" style={{ fontFamily: 'var(--font-jetbrains)' }}>
@@ -277,7 +274,7 @@ export default function Contact() {
                   Usually responds within 48 hours
                 </p>
                 <p className="text-xs text-hub-muted-2 leading-relaxed">
-                  [INSERT EMAIL ADDRESS] · Available for async collaboration across time zones.
+                  {profile.socials.email} · Available for async collaboration across time zones.
                 </p>
               </div>
             </div>

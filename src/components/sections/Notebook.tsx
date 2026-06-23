@@ -1,8 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Clock, Tag } from 'lucide-react';
+import { BookOpen, Clock, ExternalLink } from 'lucide-react';
 import { notebookEntries } from '@/data/notebook';
+import { profile } from '@/data/profile';
 
 const categoryColors: Record<string, string> = {
   security: 'text-hub-green bg-hub-green/10 border-hub-green/20',
@@ -24,10 +25,13 @@ const cardVariants = {
 };
 
 export default function Notebook() {
+  // Sort or reverse to show latest LOG first
+  const orderedEntries = [...notebookEntries].reverse();
+
   return (
     <section
       id="notebook"
-      className="section-padding relative z-10"
+      className="relative z-10"
       aria-label="Research Notebook"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,7 +69,7 @@ export default function Notebook() {
           viewport={{ once: true, margin: '-40px' }}
           className="grid grid-cols-1 md:grid-cols-3 gap-5"
         >
-          {notebookEntries.map((entry) => {
+          {orderedEntries.map((entry) => {
             const catColor = categoryColors[entry.category] || 'text-hub-muted bg-white/5 border-white/10';
             return (
               <motion.article
@@ -125,17 +129,25 @@ export default function Notebook() {
           })}
         </motion.div>
 
-        {/* Coming soon note */}
-        <motion.p
+        {/* Medium Account CTA */}
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="text-center text-hub-muted-2 text-xs font-jetbrains mt-8"
-          style={{ fontFamily: 'var(--font-jetbrains)' }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="flex justify-center mt-10"
         >
-          More entries coming soon
-        </motion.p>
+          <a
+            href={profile.socials.medium}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/8 hover:border-hub-green/30 bg-white/3 hover:bg-hub-green/5 text-hub-muted hover:text-hub-green text-xs font-semibold font-jetbrains transition-all duration-200"
+            style={{ fontFamily: 'var(--font-jetbrains)' }}
+          >
+            Read More Logs on Medium
+            <ExternalLink size={12} />
+          </a>
+        </motion.div>
       </div>
     </section>
   );

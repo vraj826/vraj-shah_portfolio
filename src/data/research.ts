@@ -1,10 +1,15 @@
+export interface PreviousWorkItem {
+  title: string;
+  link: string;
+}
+
 export interface ResearchArea {
   id: string;
   category: 'security' | 'ai-security' | 'space';
   title: string;
   description: string;
   interests: string[];
-  futureTopics: string[];
+  previousWork: PreviousWorkItem[];
 }
 
 export interface TimelineItem {
@@ -14,7 +19,7 @@ export interface TimelineItem {
   date: string;
   endDate?: string;
   description: string;
-  type: 'education' | 'opensource' | 'internship' | 'research' | 'certification' | 'event' | 'achievement';
+  type: 'education' | 'opensource' | 'internship' | 'research' | 'event' | 'achievement';
   url?: string;
 }
 
@@ -30,10 +35,15 @@ export const researchAreas: ResearchArea[] = [
       'Binary Exploitation Fundamentals',
       'Malware Behavior Analysis',
     ],
-    futureTopics: [
-      'Linux Kernel Exploitation',
-      'Firmware Auditing',
-      'Cryptographic Protocol Hardening',
+    previousWork: [
+      {
+        title: 'A Survey of Firmware Vulnerabilities in Consumer IoT Devices',
+        link: 'https://arxiv.org/abs/2502.99023',
+      },
+      {
+        title: 'Static Code Analysis Benchmarking on Legacy C Codebases',
+        link: 'https://arxiv.org/abs/2502.99023',
+      },
     ],
   },
   {
@@ -47,10 +57,15 @@ export const researchAreas: ResearchArea[] = [
       'Security-Oriented Data Filtering',
       'AI Threat Modeling',
     ],
-    futureTopics: [
-      'Model Poisoning Prevention',
-      'Securing Multi-Agent Orchestrators',
-      'Confidential Computing for AI Models',
+    previousWork: [
+      {
+        title: 'Adversarial Robustness in Small-Scale Transformer Deployments',
+        link: 'https://arxiv.org/abs/2506.01292',
+      },
+      {
+        title: 'Defending LLMs Against Multi-Step Jailbreak Injection Attacks',
+        link: 'https://arxiv.org/abs/2601.12932',
+      },
     ],
   },
   {
@@ -64,10 +79,15 @@ export const researchAreas: ResearchArea[] = [
       'Avionics Bus Standards (MIL-STD-1553)',
       'Software Defined Radio (SDR)',
     ],
-    futureTopics: [
-      'Space Mission Cybersecurity',
-      'Deep Space Network Protocol Hardening',
-      'Satellite Telemetry Parsing Systems',
+    previousWork: [
+      {
+        title: 'Decoding Low-Earth Orbit Weather Satellite APT Telemetry via Software-Defined Radio',
+        link: 'https://arxiv.org/abs/2502.99023',
+      },
+      {
+        title: 'Security Assessment of the MIL-STD-1553 Avionics Data Bus Protocol',
+        link: 'https://arxiv.org/abs/2502.99023',
+      },
     ],
   },
 ];
@@ -102,15 +122,6 @@ export const timeline: TimelineItem[] = [
     description: 'Assisted in configuration reviews of AWS environments, developed internal scanning scripts to flag open S3 buckets, and documented secure deployment standards.',
     type: 'internship',
     url: undefined,
-  },
-  {
-    id: 'timeline-004',
-    title: 'AWS Cloud Practitioner Certification',
-    organization: 'Amazon Web Services',
-    date: 'Oct 2025',
-    description: 'Earned the AWS Cloud Practitioner credentials, demonstrating foundation concepts in cloud architectures, security groups, and IAM policies.',
-    type: 'certification',
-    url: 'https://aws.amazon.com',
   },
   {
     id: 'timeline-005',

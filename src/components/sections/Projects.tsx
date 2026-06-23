@@ -39,7 +39,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="section-padding relative z-10"
+      className="relative z-10"
       aria-label="Projects section"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,10 +100,10 @@ export default function Projects() {
 
         {/* Grid */}
         <motion.div
+          key={filter}
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-40px' }}
+          animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {filtered.map((project) => {
@@ -153,7 +153,7 @@ export default function Projects() {
                 </div>
 
                 {/* Links */}
-                <div className="flex items-center gap-3 pt-3 border-t border-white/5">
+                <div className="flex items-center justify-between pt-3 border-t border-white/5 gap-3 flex-wrap">
                   <a
                     href={project.githubUrl}
                     target="_blank"
@@ -169,11 +169,11 @@ export default function Projects() {
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs text-hub-muted hover:text-hub-green transition-colors"
-                      aria-label={`View ${project.name} live demo`}
+                      className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded bg-hub-green/10 border border-hub-green/20 text-hub-green hover:bg-hub-green/20 hover:text-hub-green transition-all"
+                      aria-label={`View ${project.name} live deployment`}
                     >
-                      <ExternalLink size={14} />
-                      Live Demo
+                      <ExternalLink size={12} />
+                      Live Deployment
                     </a>
                   )}
                 </div>

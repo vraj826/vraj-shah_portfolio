@@ -28,21 +28,126 @@ function Counter({ target }: { target: string }) {
   return <span ref={ref}>{displayed}</span>;
 }
 
-const metrics = [
-  { icon: GitPullRequest, label: 'Pull Requests', value: openSourceMetrics.prs, color: 'text-hub-green' },
-  { icon: AlertCircle, label: 'Issues', value: openSourceMetrics.issues, color: 'text-hub-blue' },
-  { icon: FolderGit2, label: 'Repositories', value: openSourceMetrics.repos, color: 'text-hub-green' },
-  { icon: Building2, label: 'Organizations', value: openSourceMetrics.organizations, color: 'text-hub-blue' },
-];
-
 const activityTypeConfig = {
   pr: { label: 'PR', color: 'text-hub-green', bg: 'bg-hub-green/10' },
   issue: { label: 'Issue', color: 'text-hub-blue', bg: 'bg-hub-blue/10' },
   review: { label: 'Review', color: 'text-hub-muted', bg: 'bg-white/5' },
-  contribution: { label: 'Contrib', color: 'text-hub-green', bg: 'bg-hub-green/10' },
+  contribution: { label: 'Contri', color: 'text-hub-green', bg: 'bg-hub-green/10' },
 };
 
 export default function OpenSource() {
+  const [liveMetrics, setLiveMetrics] = useState({
+    prs: openSourceMetrics.prs,
+    issues: openSourceMetrics.issues,
+    repos: openSourceMetrics.repos,
+    organizations: openSourceMetrics.organizations,
+  });
+  const [liveActivity, setLiveActivity] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchGitHubData() {
+      try {
+        // Fetch repositories count
+        const userRes = await fetch('https://api.github.com/users/vraj826');
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          if (userData.public_repos) {
+            setLiveMetrics(prev => ({ ...prev, repos: String(userData.public_repos) }));
+          }
+        }
+
+        // Fetch PRs count (search query)
+        const prsRes = await fetch('https://api.github.com/search/issues?q=author:vraj826+type:pr');
+        if (prsRes.ok) {
+          const prsData = await prsRes.json();
+          if (prsData.total_count !== undefined) {
+            setLiveMetrics(prev => ({ ...prev, prs: String(prsData.total_count) }));
+          }
+        }
+
+        // Fetch Issues count (search query)
+        const issuesRes = await fetch('https://api.github.com/search/issues?q=author:vraj826+type:issue');
+        if (issuesRes.ok) {
+          const issuesData = await issuesRes.json();
+          if (issuesData.total_count !== undefined) {
+            setLiveMetrics(prev => ({ ...prev, issues: String(issuesData.total_count) }));
+          }
+        }
+
+        // Fetch Organizations count
+        const orgsRes = await fetch('https://api.github.com/users/vraj826/orgs');
+        if (orgsRes.ok) {
+          const orgsData = await orgsRes.json();
+          if (Array.isArray(orgsData)) {
+            setLiveMetrics(prev => ({ ...prev, organizations: String(orgsData.length) }));
+          }
+        }
+
+        // Fetch public events (activity)
+        const eventsRes = await fetch('https://api.github.com/users/vraj826/events');
+        if (eventsRes.ok) {
+          const eventsData = await eventsRes.json();
+          if (Array.isArray(eventsData)) {
+            const parsed = eventsData
+              .filter(e => ['PullRequestEvent', 'IssuesEvent', 'PushEvent', 'CreateEvent'].includes(e.type))
+              .slice(0, 4)
+              .map((e: any) => {
+                let type: 'pr' | 'issue' | 'review' | 'contribution' = 'contribution';
+                let description = '';
+                const repoName = e.repo.name.replace('vraj826/', '');
+
+                if (e.type === 'PullRequestEvent') {
+                  type = 'pr';
+                  const action = e.payload.action;
+                  description = `${action === 'opened' ? 'Opened' : 'Merged'} PR #${e.payload.pull_request.number}: "${e.payload.pull_request.title}" in ${repoName}`;
+                } else if (e.type === 'IssuesEvent') {
+                  type = 'issue';
+                  description = `${e.payload.action === 'opened' ? 'Opened' : 'Closed'} issue #${e.payload.issue.number}: "${e.payload.issue.title}" in ${repoName}`;
+                } else if (e.type === 'PushEvent') {
+                  type = 'contribution';
+                  const commitMsg = e.payload.commits && e.payload.commits[0] ? e.payload.commits[0].message : '';
+                  description = `Pushed commits to ${e.payload.ref.replace('refs/heads/', '')} in ${repoName}: "${commitMsg.split('\n')[0]}"`;
+                } else if (e.type === 'CreateEvent') {
+                  type = 'contribution';
+                  description = `Created ${e.payload.ref_type} "${e.payload.ref || repoName}" in ${repoName}`;
+                }
+
+                const dateObj = new Date(e.created_at);
+                const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+                return {
+                  type,
+                  description,
+                  date: dateStr,
+                  url: `https://github.com/${e.repo.name}`,
+                };
+              });
+
+            if (parsed.length > 0) {
+              setLiveActivity(parsed);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching github telemetry:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchGitHubData();
+  }, []);
+
+  const metricsList = [
+    { icon: GitPullRequest, label: 'Pull Requests', value: liveMetrics.prs, color: 'text-hub-green' },
+    { icon: AlertCircle, label: 'Issues', value: liveMetrics.issues, color: 'text-hub-blue' },
+    { icon: FolderGit2, label: 'Repositories', value: liveMetrics.repos, color: 'text-hub-green' },
+    { icon: Building2, label: 'Organizations', value: liveMetrics.organizations, color: 'text-hub-blue' },
+  ];
+
+  const activityList = liveActivity.length > 0 ? liveActivity : recentActivity;
+
   return (
     <section
       id="opensource"
@@ -84,7 +189,7 @@ export default function OpenSource() {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
         >
-          {metrics.map((m) => {
+          {metricsList.map((m) => {
             const Icon = m.icon;
             return (
               <div
@@ -181,8 +286,8 @@ export default function OpenSource() {
             </h3>
             <div className="glass-card rounded-xl p-5">
               <div className="flex flex-col gap-4">
-                {recentActivity.map((item, i) => {
-                  const cfg = activityTypeConfig[item.type];
+                {activityList.map((item, i) => {
+                  const cfg = activityTypeConfig[item.type as keyof typeof activityTypeConfig] || activityTypeConfig.contribution;
                   return (
                     <motion.div
                       key={i}
@@ -200,7 +305,7 @@ export default function OpenSource() {
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-hub-muted hover:text-hub-text transition-colors leading-relaxed"
+                          className="text-xs text-hub-muted hover:text-hub-text transition-colors leading-relaxed break-words"
                         >
                           {item.description}
                         </a>
@@ -216,7 +321,7 @@ export default function OpenSource() {
 
             {/* GitHub CTA */}
             <motion.a
-              href={`https://github.com/[INSERT-GITHUB-HANDLE]`}
+              href="https://github.com/vraj826"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}

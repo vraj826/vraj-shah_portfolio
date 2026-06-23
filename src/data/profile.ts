@@ -24,8 +24,8 @@ export const profile = {
   socials: {
     linkedin: 'https://linkedin.com/in/vrajkumar-shah',
     github: 'https://github.com/vraj826',
-    twitter: 'https://x.com/vrajkumar_shah',
     email: 'vrajkumar.shah@example.com',
+    medium: 'https://medium.com/@vraj826',
   },
   resumeUrl: '/resume-placeholder.pdf',
 };

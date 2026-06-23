@@ -167,7 +167,7 @@ export default function TerminalPage() {
           { text: `  Email:    ${profile.socials.email.replace(/\[INSERT.*?\]/g, 'vraj@example.com')}`, type: 'output' },
           { text: `  LinkedIn: ${profile.socials.linkedin.replace(/\[INSERT.*?\]/g, 'vrajkumar-shah')}`, type: 'output' },
           { text: `  GitHub:   ${profile.socials.github.replace(/\[INSERT.*?\]/g, 'vraj826')}`, type: 'output' },
-          { text: `  Twitter:  ${profile.socials.twitter.replace(/\[INSERT.*?\]/g, 'vraj_shah')}`, type: 'output' },
+          { text: `  Medium:   ${profile.socials.medium}`, type: 'output' },
         ]);
         break;
 

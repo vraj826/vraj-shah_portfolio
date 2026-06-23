@@ -1,0 +1,338 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — Security Hub
+   ============================================================ */
+:root {
+  /* Hub colors */
+  --hub-bg: #0A0F1C;
+  --hub-surface: #111827;
+  --hub-surface-2: #1a2234;
+  --hub-border: rgba(255, 255, 255, 0.06);
+  --hub-green: #00FF9D;
+  --hub-green-dim: rgba(0, 255, 157, 0.12);
+  --hub-blue: #3B82F6;
+  --hub-blue-dim: rgba(59, 130, 246, 0.12);
+  --hub-text: #F8FAFC;
+  --hub-muted: #94A3B8;
+  --hub-muted-2: #64748B;
+
+  /* Mission Control colors */
+  --mission-bg: #050816;
+  --mission-surface: #0B1120;
+  --mission-surface-2: #101828;
+  --mission-border: rgba(212, 175, 55, 0.12);
+  --mission-gold: #D4AF37;
+  --mission-gold-dim: rgba(212, 175, 55, 0.1);
+  --mission-amber: #FBBF24;
+  --mission-text: #FFF7E6;
+  --mission-muted: #C9A84C;
+
+  /* Skill level colors */
+  --skill-exploring: rgba(148, 163, 184, 0.15);
+  --skill-learning: rgba(59, 130, 246, 0.2);
+  --skill-building: rgba(0, 255, 157, 0.2);
+  --skill-comfortable: rgba(0, 255, 157, 0.35);
+
+  /* Scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--hub-surface-2) transparent;
+}
+
+/* ============================================================
+   TAILWIND v4 THEME EXTENSION (@theme inline)
+   ============================================================ */
+@theme inline {
+  --color-hub-bg: var(--hub-bg);
+  --color-hub-surface: var(--hub-surface);
+  --color-hub-surface-2: var(--hub-surface-2);
+  --color-hub-green: var(--hub-green);
+  --color-hub-green-dim: var(--hub-green-dim);
+  --color-hub-blue: var(--hub-blue);
+  --color-hub-blue-dim: var(--hub-blue-dim);
+  --color-hub-text: var(--hub-text);
+  --color-hub-muted: var(--hub-muted);
+  --color-hub-muted-2: var(--hub-muted-2);
+
+  --color-mission-bg: var(--mission-bg);
+  --color-mission-surface: var(--mission-surface);
+  --color-mission-surface-2: var(--mission-surface-2);
+  --color-mission-gold: var(--mission-gold);
+  --color-mission-gold-dim: var(--mission-gold-dim);
+  --color-mission-amber: var(--mission-amber);
+  --color-mission-text: var(--mission-text);
+  --color-mission-muted: var(--mission-muted);
+
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
+}
+
+/* ============================================================
+   GLOBAL BASE
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--hub-bg);
+  color: var(--hub-text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(0, 255, 157, 0.2);
+  color: var(--hub-text);
+}
+
+/* ============================================================
+   SECURITY HUB BACKGROUND — Subtle Technical Grid
+   ============================================================ */
+.hub-grid-bg {
+  position: relative;
+}
+
+.hub-grid-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hub-grid-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 255, 157, 0.04) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   MISSION CONTROL BACKGROUND — Dark Space
+   ============================================================ */
+.mission-bg {
+  background-color: var(--mission-bg);
+  color: var(--mission-text);
+}
+
+/* ============================================================
+   GLASSMORPHISM CARDS
+   ============================================================ */
+.glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--hub-border);
+}
+
+.glass-card-mission {
+  background: rgba(11, 17, 32, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--mission-border);
+}
+
+/* ============================================================
+   GLOW EFFECTS
+   ============================================================ */
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.15), 0 0 40px rgba(0, 255, 157, 0.05);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15), 0 0 40px rgba(59, 130, 246, 0.05);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15), 0 0 40px rgba(212, 175, 55, 0.05);
+}
+
+/* ============================================================
+   TEXT GRADIENT
+   ============================================================ */
+.text-gradient-green {
+  background: linear-gradient(135deg, var(--hub-green) 0%, #00c97d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--mission-gold) 0%, var(--mission-amber) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   TERMINAL CURSOR BLINK
+   ============================================================ */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.1em;
+  background: var(--hub-green);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+}
+
+/* ============================================================
+   STAR FIELD (Mission Control) — generated in canvas,
+   but fallback CSS dots for no-JS
+   ============================================================ */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes star-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-20px); }
+}
+
+/* ============================================================
+   ANIMATED STATUS DOT
+   ============================================================ */
+@keyframes pulse-status {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+.status-dot-active {
+  animation: pulse-status 2s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.status-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* ============================================================
+   SCROLL ANIMATIONS — managed by Framer Motion,
+   but base state for no-JS
+   ============================================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* ============================================================
+   SECTION SPACING
+   ============================================================ */
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hub-surface-2);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hub-muted-2);
+}
+
+/* ============================================================
+   FOCUS STYLES (Accessibility)
+   ============================================================ */
+*:focus-visible {
+  outline: 2px solid var(--hub-green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   TERMINAL STYLES
+   ============================================================ */
+.terminal-font {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.terminal-line {
+  line-height: 1.6;
+}
+
+/* ============================================================
+   NAV ACTIVE INDICATOR
+   ============================================================ */
+.nav-active::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: var(--hub-green);
+  border-radius: 1px;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   SKILL LEVEL CHIPS
+   ============================================================ */
+.skill-chip-exploring {
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #94A3B8;
+}
+
+.skill-chip-learning {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #60A5FA;
+}
+
+.skill-chip-building {
+  background: rgba(0, 255, 157, 0.1);
+  border: 1px solid rgba(0, 255, 157, 0.25);
+  color: #00FF9D;
+}
+
+.skill-chip-comfortable {
+  background: rgba(0, 255, 157, 0.18);
+  border: 1px solid rgba(0, 255, 157, 0.4);
+  color: #00FF9D;
+}

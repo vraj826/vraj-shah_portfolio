@@ -14,6 +14,7 @@ const navLinks = [
   { href: '#timeline', label: 'Journey' },
   { href: '#projects', label: 'Projects' },
   { href: '#opensource', label: 'Open Source' },
+  { href: '#certifications', label: 'Certifications' },
   { href: '#research', label: 'Research' },
   { href: '#notebook', label: 'Notebook' },
   { href: '#contact', label: 'Contact' },

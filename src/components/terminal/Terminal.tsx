@@ -406,8 +406,8 @@ export default function Terminal() {
 
             {/* Terminal Footer status info */}
             <div className="px-6 py-2 bg-[#020617] border-t border-white/5 flex justify-between items-center text-[10px] text-hub-muted-2 font-jetbrains">
-              <span>HOST: vrajkumar-shah</span>
-              <span>TAB to Autocomplete</span>
+              <span>© 2026 Vrajkumar Shah. All rights reserved.</span>
+              <span>Use TAB to autocomplete commands</span>
             </div>
           </motion.div>
         </motion.div>

@@ -50,10 +50,9 @@ export default function Footer() {
             </div>
             {/* Blinking & disappearing ticker word */}
             <div className={`${isHub ? 'h-5' : 'h-6'} flex items-center font-jetbrains text-xs ${isHub ? 'mt-0.5' : 'mt-1'}`}>
-              <span 
-                className={`transition-opacity duration-500 text-hub-green font-semibold tracking-wider ${
-                  fadeState === 'in' ? 'opacity-100' : 'opacity-0'
-                }`}
+              <span
+                className={`transition-opacity duration-500 text-hub-green font-semibold tracking-wider ${fadeState === 'in' ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 {tickerWords[tickerIndex]}
               </span>

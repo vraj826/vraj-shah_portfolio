@@ -90,7 +90,7 @@ export default function Navbar() {
 
           {/* Desktop nav links */}
           {isHub && (
-            <div className="hidden lg:flex items-center gap-1" role="list">
+            <div className="hidden lg:flex items-center gap-0.5" role="list">
               {navLinks.map((link) => {
                 const isActive = activeSection === link.href.slice(1);
                 return (
@@ -98,7 +98,7 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     role="listitem"
-                    className={`relative px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
+                    className={`relative px-2.5 py-1 text-[11px] font-medium tracking-wide transition-all duration-200 rounded-md ${
                       isActive
                         ? 'text-hub-green'
                         : 'text-hub-muted hover:text-hub-text'
@@ -120,28 +120,35 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
+            {/* Divider — only shown on hub page when nav links are visible */}
+            {isHub && (
+              <div className="hidden lg:block w-px h-4 bg-white/10 mx-1" aria-hidden="true" />
+            )}
+
             {/* Mission Control link */}
             <Link
               href="/mission"
               id="nav-mission-btn"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-sm text-hub-muted hover:text-mission-amber border border-transparent hover:border-mission-gold/20 hover:bg-mission-gold/5 rounded-md transition-all duration-200"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold tracking-wider uppercase text-mission-amber/70 hover:text-mission-amber border border-mission-gold/20 hover:border-mission-gold/50 hover:bg-mission-gold/8 rounded-full transition-all duration-200 hover:shadow-[0_0_8px_rgba(212,175,55,0.15)]"
               aria-label="Open Mission Control — press M"
               title="Mission Control (M)"
             >
-              <Rocket size={14} aria-hidden="true" />
-              <span className="hidden md:inline">Mission [M]</span>
+              <Rocket size={12} aria-hidden="true" />
+              <span className="hidden md:inline">Mission</span>
+              <span className="hidden md:inline text-mission-amber/40 font-mono text-[10px]">[M]</span>
             </Link>
 
             {/* Terminal button */}
             <button
               id="nav-terminal-btn"
               onClick={openTerminal}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-hub-muted hover:text-hub-green border border-transparent hover:border-hub-green/20 hover:bg-hub-green/5 rounded-md transition-all duration-200"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold tracking-wider uppercase text-hub-green/70 hover:text-hub-green border border-hub-green/20 hover:border-hub-green/50 hover:bg-hub-green/8 rounded-full transition-all duration-200 hover:shadow-[0_0_8px_rgba(0,255,136,0.15)]"
               aria-label="Open terminal — press T"
               title="Terminal (T)"
             >
-              <Terminal size={14} aria-hidden="true" />
-              <span className="hidden md:inline">Terminal [T]</span>
+              <Terminal size={12} aria-hidden="true" />
+              <span className="hidden md:inline">Terminal</span>
+              <span className="hidden md:inline text-hub-green/40 font-mono text-[10px]">[T]</span>
             </button>
 
             {/* Mobile menu toggle */}

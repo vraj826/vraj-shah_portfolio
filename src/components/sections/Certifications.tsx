@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Award, ExternalLink } from 'lucide-react';
+import { Award, ExternalLink, Shield, Cloud, Code2, Brain, Globe } from 'lucide-react';
 import { certifications, certificationCategories } from '@/data/certifications';
 
 const containerVariants = {
@@ -17,6 +17,14 @@ const cardVariants = {
 
 export default function Certifications() {
   const [activeTab, setActiveTab] = useState('all');
+
+  const certIconMap: Record<string, any> = {
+    cybersecurity: Shield,
+    cloud: Cloud,
+    opensource: Code2,
+    ai: Brain,
+    space: Globe,
+  };
 
   const filtered =
     activeTab === 'all'
@@ -72,23 +80,26 @@ export default function Certifications() {
           >
             All
           </button>
-          {certificationCategories.map((cat) => (
-            <button
-              key={cat.id}
-              role="tab"
-              aria-selected={activeTab === cat.id}
-              onClick={() => setActiveTab(cat.id)}
-              id={`cert-tab-${cat.id}`}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 ${
-                activeTab === cat.id
-                  ? 'border-hub-green/40 bg-hub-green/10 text-hub-green'
-                  : 'border-white/8 text-hub-muted hover:text-hub-text hover:border-white/15'
-              }`}
-              style={{ fontFamily: 'var(--font-jetbrains)' }}
-            >
-              {cat.icon} {cat.label}
-            </button>
-          ))}
+          {certificationCategories.map((cat) => {
+            const Icon = certIconMap[cat.id] || Award;
+            return (
+              <button
+                key={cat.id}
+                role="tab"
+                aria-selected={activeTab === cat.id}
+                onClick={() => setActiveTab(cat.id)}
+                id={`cert-tab-${cat.id}`}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 ${
+                  activeTab === cat.id
+                    ? 'border-hub-green/40 bg-hub-green/10 text-hub-green'
+                    : 'border-white/8 text-hub-muted hover:text-hub-text hover:border-white/15'
+                }`}
+                style={{ fontFamily: 'var(--font-jetbrains)' }}
+              >
+                <Icon size={14} className="inline-block mr-1" aria-hidden="true" /> {cat.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Grid */}

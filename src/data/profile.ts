@@ -1,6 +1,7 @@
 export const profile = {
   name: 'Vrajkumar Shah',
-  shortName: 'Vraj',
+  shortName: 'Vrajkumar Shah',
+  missionName: 'security-hub by Vrajkumar Shah',
   title: 'Computer Engineering Undergraduate',
   taglines: [
     'Cybersecurity Enthusiast',
@@ -17,15 +18,15 @@ export const profile = {
     'Currently learning kernel development, cloud infrastructure hardening, threat modeling for artificial intelligence pipelines, and satellite signal telemetry decoding.',
   careerGoals:
     'Aspiring to work as a security engineer, DevSecOps specialist, or systems security researcher where I can contribute to hardening open-source systems and securing critical technologies.',
-  location: 'Ahmedabad, India',
-  university: 'Gujarat Technological University',
-  degree: 'B.E. in Computer Engineering',
-  graduationYear: '2027',
+  location: 'Vadodara, India',
+  university: 'Dharmsinh Desai University',
+  degree: 'B.Tech in Computer Engineering',
+  graduationYear: '2029',
   socials: {
-    linkedin: 'https://linkedin.com/in/vrajkumar-shah',
+    linkedin: 'https://www.linkedin.com/in/vrajkumar-shah-337b9b387',
     github: 'https://github.com/vraj826',
-    email: 'vrajkumar.shah@example.com',
-    medium: 'https://medium.com/@vraj826',
+    email: 'vrajshah826@gmail.com',
+    medium: 'https://medium.com/@vrajshah826',
   },
-  resumeUrl: '/resume-placeholder.pdf',
+  resumeUrl: '/Vrajkumar_Shah_Resume.pdf',
 };

@@ -271,7 +271,7 @@ export default function Contact() {
                   className="text-sm font-medium text-hub-text mb-1"
                   style={{ fontFamily: 'var(--font-space-grotesk)' }}
                 >
-                  Usually responds within 48 hours
+                  Usually responded within 48 hours
                 </p>
                 <p className="text-xs text-hub-muted-2 leading-relaxed">
                   {profile.socials.email} · Available for async collaboration across time zones.

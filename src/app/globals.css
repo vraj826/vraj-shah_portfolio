@@ -185,12 +185,16 @@ body {
 
 .terminal-cursor {
   display: inline-block;
-  width: 8px;
-  height: 1.1em;
+  width: 6px;
+  height: 1em;
   background: var(--hub-green);
-  animation: blink 1s step-end infinite;
+  opacity: 1;
   vertical-align: text-bottom;
   margin-left: 2px;
+}
+
+.terminal-cursor.active {
+  animation: blink 1s step-end infinite;
 }
 
 /* ============================================================

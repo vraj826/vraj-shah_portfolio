@@ -36,14 +36,27 @@ const COMMAND_LIST = [
 export default function TerminalPage() {
   const router = useRouter();
   const [history, setHistory] = useState<Line[]>([
-    { text: 'SYSTEM: Booting secure standalone telemetry terminal...', type: 'system' },
-    { text: 'SYSTEM: Secure tunnel established. Type "help" to display available systems.', type: 'system' },
+    { text: 'SYSTEM: Initializing secure shell...', type: 'system' },
   ]);
   const [input, setInput] = useState('');
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHistory([
+        {
+          text: 'SYSTEM: Connection established. Type "help" to see available commands.',
+          type: 'system',
+        },
+      ]);
+    }, 1100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -83,7 +96,6 @@ export default function TerminalPage() {
           { text: '  research     - View academic research areas (Cyber, AI, Space)', type: 'output' },
           { text: '  notebook     - List recent engineering notebook entries', type: 'output' },
           { text: '  contact      - Get contact details & social channels', type: 'output' },
-          { text: '  resume       - Open resume in a new tab', type: 'output' },
           { text: '  mission      - Launch Mission Control UI (/mission)', type: 'success' },
           { text: '  hub          - Return to homepage (/)', type: 'output' },
           { text: '  clear        - Clear screen buffer', type: 'output' },
@@ -247,7 +259,7 @@ export default function TerminalPage() {
         <div className="flex items-center gap-3">
           <TerminalIcon size={20} className="text-hub-green animate-pulse" />
           <h1 className="font-space-grotesk text-lg tracking-wider font-semibold uppercase text-hub-text">
-            Autonomous Command Shell v1.0.4
+            terminal@security-hub
           </h1>
         </div>
         <Link
@@ -263,7 +275,7 @@ export default function TerminalPage() {
       <div
         ref={containerRef}
         onClick={() => inputRef.current?.focus()}
-        className="flex-1 overflow-y-auto mb-4 bg-hub-surface/40 border border-hub-green/5 rounded-xl p-6 shadow-inner space-y-2 cursor-text"
+        className="flex-1 overflow-y-auto mb-4 bg-[#0b1320] border border-hub-green/5 rounded-xl p-6 shadow-inner space-y-2 text-xs cursor-text"
       >
         {history.map((line, idx) => {
           let colorClass = 'text-hub-text/90';
@@ -280,16 +292,18 @@ export default function TerminalPage() {
         })}
 
         {/* Command Line */}
-        <div className="flex items-center gap-2 pt-2">
-          <span className="text-hub-blue shrink-0">visitor@vrajkumar-shah:~$</span>
+        <div className="flex items-center gap-2 pt-2 border border-white/10 rounded-md px-3 py-2 bg-[#0d1a2f]">
+          <span className="text-hub-blue shrink-0 text-xs">visitor@security-hub:~$</span>
           <div className="relative flex-1 flex items-center">
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-transparent border-none outline-none text-hub-green font-jetbrains caret-transparent focus:ring-0 focus:outline-none p-0"
+              className="w-full bg-transparent border-none outline-none text-hub-green text-xs font-jetbrains caret-transparent focus:ring-0 focus:outline-none p-0"
               aria-label="Terminal command input"
               autoComplete="off"
               autoCapitalize="off"
@@ -302,7 +316,7 @@ export default function TerminalPage() {
                 left: `${input.length * 8.4}px`,
               }}
             >
-              <span className="terminal-cursor" />
+              <span className={`terminal-cursor ${isInputFocused ? 'active' : ''}`} />
             </span>
           </div>
         </div>
@@ -310,7 +324,7 @@ export default function TerminalPage() {
 
       {/* Footer Info */}
       <div className="flex justify-between items-center text-xs text-hub-muted-2 border-t border-hub-green/10 pt-4 mt-auto">
-        <span>STATUS: Connected</span>
+        <span>HOST: vrajkumar-shah</span>
         <span>Keyboard Shortcuts: Tab to autocomplete, Esc to exit</span>
       </div>
     </main>

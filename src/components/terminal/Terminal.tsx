@@ -39,13 +39,33 @@ export default function Terminal() {
   const router = useRouter();
   const [history, setHistory] = useState<Line[]>([
     { text: 'SYSTEM: Initializing secure shell...', type: 'system' },
-    { text: 'SYSTEM: Connection established. Type "help" to see available commands.', type: 'system' },
   ]);
   const [input, setInput] = useState('');
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+
+    if (isOpen) {
+      setHistory([{ text: 'SYSTEM: Initializing secure shell...', type: 'system' }]);
+      timer = setTimeout(() => {
+        setHistory([
+          {
+            text: 'SYSTEM: Connection established. Type "help" to see available commands.',
+            type: 'system',
+          },
+        ]);
+      }, 1100);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isOpen]);
 
   // Focus input whenever terminal is open
   useEffect(() => {
@@ -65,7 +85,7 @@ export default function Terminal() {
     const trimmed = cmd.trim();
     if (!trimmed) return;
 
-    const newHistory = [...history, { text: `visitor@vrajkumar-shah:~$ ${trimmed}`, type: 'input' as const }];
+    const newHistory = [...history, { text: `visitor@security-hub:~$ ${trimmed}`, type: 'input' as const }];
     const parts = trimmed.split(' ');
     const primaryCmd = parts[0].toLowerCase();
 
@@ -88,7 +108,6 @@ export default function Terminal() {
           { text: '  research     - View academic research areas (Cyber, AI, Space)', type: 'output' },
           { text: '  notebook     - List recent engineering notebook entries', type: 'output' },
           { text: '  contact      - Get contact details & social channels', type: 'output' },
-          { text: '  resume       - Open resume in a new tab', type: 'output' },
           { text: '  mission      - Launch Mission Control UI (/mission)', type: 'success' },
           { text: '  hub          - Return to homepage (/)', type: 'output' },
           { text: '  clear        - Clear screen buffer', type: 'output' },
@@ -223,8 +242,13 @@ export default function Terminal() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleCommand(input);
+      setInput('');
+    }
     // Arrow Up: Command history back
-    if (e.key === 'ArrowUp') {
+    else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (cmdHistory.length === 0) return;
       const nextIdx = historyIdx + 1;
@@ -279,15 +303,15 @@ export default function Terminal() {
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 10 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="w-full max-w-4xl h-[70vh] flex flex-col glass-card shadow-2xl rounded-xl border border-hub-green/20 overflow-hidden"
+            className="w-full max-w-4xl h-[70vh] flex flex-col shadow-2xl rounded-xl border border-hub-green/20 overflow-hidden bg-[#08121f]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Terminal Header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-hub-surface-2 border-b border-hub-green/10">
+            <div className="flex items-center justify-between px-4 py-3 bg-[#0d1a2f] border-b border-hub-green/10">
               <div className="flex items-center gap-2">
                 <TerminalIcon size={16} className="text-hub-green" />
                 <span id="terminal-title" className="font-space-grotesk text-xs font-semibold tracking-wider text-hub-text/90 uppercase">
-                  Telemetry & Security Shell v1.0.4
+                  terminal@security-hub
                 </span>
               </div>
               <button
@@ -299,29 +323,31 @@ export default function Terminal() {
               </button>
             </div>
 
-            {/* Terminal output area */}
-            <div
-              ref={containerRef}
-              className="flex-1 p-6 overflow-y-auto font-jetbrains text-sm space-y-2 selection:bg-hub-green/30 select-text cursor-text"
-              onClick={() => inputRef.current?.focus()}
-            >
-              {history.map((line, idx) => {
-                let colorClass = 'text-hub-text/90';
-                if (line.type === 'input') colorClass = 'text-hub-green';
-                else if (line.type === 'error') colorClass = 'text-red-400 font-semibold';
-                else if (line.type === 'success') colorClass = 'text-hub-green font-semibold';
-                else if (line.type === 'system') colorClass = 'text-hub-blue/80';
+            {/* Terminal body */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <div
+                ref={containerRef}
+                className="flex-1 overflow-y-auto p-6 font-jetbrains text-xs space-y-2 selection:bg-hub-green/30 select-text cursor-text"
+                onClick={() => inputRef.current?.focus()}
+              >
+                {history.map((line, idx) => {
+                  let colorClass = 'text-hub-text/90';
+                  if (line.type === 'input') colorClass = 'text-hub-green';
+                  else if (line.type === 'error') colorClass = 'text-red-400 font-semibold';
+                  else if (line.type === 'success') colorClass = 'text-hub-green font-semibold';
+                  else if (line.type === 'system') colorClass = 'text-hub-blue/80';
 
-                return (
-                  <div key={idx} className="whitespace-pre-wrap leading-relaxed">
-                    <span className={colorClass}>{line.text}</span>
-                  </div>
-                );
-              })}
+                  return (
+                    <div key={idx} className="whitespace-pre-wrap leading-relaxed">
+                      <span className={colorClass}>{line.text}</span>
+                    </div>
+                  );
+                })}
+              </div>
 
               {/* Input prompt line */}
-              <div className="flex items-center gap-2 pt-2">
-                <span className="text-hub-blue shrink-0">visitor@vrajkumar-shah:~$</span>
+              <div className="flex items-center gap-2 px-6 py-3 bg-[#0d1a2f] border border-white/10 rounded-md">
+                <span className="text-hub-blue shrink-0 text-xs">visitor@security-hub:~$</span>
                 <div className="relative flex-1 flex items-center">
                   <input
                     ref={inputRef}
@@ -329,29 +355,30 @@ export default function Terminal() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    className="w-full bg-transparent border-none outline-none text-hub-green font-jetbrains caret-transparent focus:ring-0 focus:outline-none p-0"
+                    onFocus={() => setIsInputFocused(true)}
+                    onBlur={() => setIsInputFocused(false)}
+                    className="w-full bg-transparent border-none outline-none text-hub-green text-xs font-jetbrains caret-transparent focus:ring-0 focus:outline-none p-0"
                     aria-label="Terminal command input"
                     autoFocus
                     autoComplete="off"
                     autoCapitalize="off"
                     spellCheck="false"
                   />
-                  {/* Custom blinking cursor at the end of input text */}
                   <span
                     className="absolute pointer-events-none text-hub-green font-jetbrains leading-none flex items-center"
                     style={{
-                      left: `${input.length * 8.4}px`, // JetBrains Mono text spacing approximation
+                      left: `${input.length * 8.4}px`,
                     }}
                   >
-                    <span className="terminal-cursor" />
+                    <span className={`terminal-cursor ${isInputFocused ? 'active' : ''}`} />
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Terminal Footer status info */}
-            <div className="px-4 py-2 bg-hub-surface-2/50 border-t border-hub-green/10 flex justify-between items-center text-[10px] text-hub-muted-2 font-jetbrains">
-              <span>HOST: vrajkumar.space</span>
+            <div className="px-4 py-2 bg-[#0d1a2f]/90 border-t border-hub-green/10 flex justify-between items-center text-[10px] text-hub-muted-2 font-jetbrains">
+              <span>HOST: vrajkumar-shah</span>
               <span>ESC: Exit &nbsp;|&nbsp; TAB: Autocomplete</span>
             </div>
           </motion.div>

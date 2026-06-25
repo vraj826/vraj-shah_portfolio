@@ -57,11 +57,10 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
             ? 'bg-hub-surface/90 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20'
             : 'bg-transparent'
-        }`}
+          }`}
       >
         <nav
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
@@ -98,11 +97,10 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     role="listitem"
-                    className={`relative px-2.5 py-1 text-[11px] font-medium tracking-wide transition-all duration-200 rounded-md ${
-                      isActive
+                    className={`relative px-2.5 py-1 text-[11px] font-medium tracking-wide transition-all duration-200 rounded-md ${isActive
                         ? 'text-hub-green'
                         : 'text-hub-muted hover:text-hub-text'
-                    }`}
+                      }`}
                   >
                     {link.label}
                     {isActive && (
@@ -134,7 +132,7 @@ export default function Navbar() {
               title="Mission Control (M)"
             >
               <Rocket size={12} aria-hidden="true" />
-              <span className="hidden md:inline">Mission</span>
+              <span className="hidden md:inline">Mission Control</span>
               <span className="hidden md:inline text-mission-amber/40 font-mono text-[10px]">[M]</span>
             </Link>
 
@@ -181,11 +179,10 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      activeSection === link.href.slice(1)
+                    className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeSection === link.href.slice(1)
                         ? 'text-hub-green bg-hub-green/8'
                         : 'text-hub-muted hover:text-hub-text hover:bg-white/4'
-                    }`}
+                      }`}
                   >
                     {link.label}
                   </a>

@@ -32,7 +32,12 @@ export default function MissionLayout({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [tickerIndex, setTickerIndex] = useState(0);
   const [fadeState, setFadeState] = useState<'in' | 'out'>('in');
+  const [mounted, setMounted] = useState(false);
   const year = new Date().getFullYear();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Q key → back to security hub
   useEffect(() => {

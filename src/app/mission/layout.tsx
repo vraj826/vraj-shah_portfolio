@@ -11,7 +11,7 @@ import { profile } from '@/data/profile';
 
 const missionNavLinks = [
   { href: '#mission-brief', label: 'Mission Brief' },
-  { href: '#telemetry-tracking', label: 'Telemetry & Tracking' },
+  { href: '#telemetry-tracking', label: 'Cosmic Address' },
   { href: '#open-science', label: 'Open Science' },
   { href: '#research-logs', label: 'Research Logs' },
   { href: '#space-notes', label: 'Space Notes' },
@@ -53,7 +53,7 @@ export default function MissionLayout({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [router]);
 
-  // Scroll spy
+  // Scroll spy and smooth scrolling
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -70,6 +70,29 @@ export default function MissionLayout({
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Handle anchor link smooth scrolling with proper offset
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
+        const href = target.getAttribute('href');
+        if (href) {
+          e.preventDefault();
+          const element = document.getElementById(href.slice(1));
+          if (element) {
+            const navHeight = 80; // navbar height + buffer
+            const offsetTop = element.getBoundingClientRect().top + window.scrollY - navHeight;
+            window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+          }
+        }
+      }
+    };
+
+    // Add event listener to document for delegated event handling
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
   // Ticker animation
@@ -120,7 +143,7 @@ export default function MissionLayout({
               className="font-space-grotesk font-semibold text-sm tracking-wide text-mission-gold/90 group-hover:text-mission-gold transition-colors"
               style={{ fontFamily: 'var(--font-space-grotesk)' }}
             >
-              mission-control
+              Vrajkumar Shah
             </span>
           </Link>
 

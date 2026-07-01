@@ -49,7 +49,7 @@ export default function OpenSource() {
     async function fetchGitHubData() {
       try {
         // Fetch repositories count
-        const userRes = await fetch('https://api.github.com/users/vraj826');
+        const userRes = await fetch('/api/github?endpoint=user');
         if (userRes.ok) {
           const userData = await userRes.json();
           if (userData.public_repos) {
@@ -58,7 +58,7 @@ export default function OpenSource() {
         }
 
         // Fetch PRs count (search query)
-        const prsRes = await fetch('https://api.github.com/search/issues?q=author:vraj826+type:pr');
+        const prsRes = await fetch('/api/github?endpoint=prs');
         if (prsRes.ok) {
           const prsData = await prsRes.json();
           if (prsData.total_count !== undefined) {
@@ -67,7 +67,7 @@ export default function OpenSource() {
         }
 
         // Fetch Issues count (search query)
-        const issuesRes = await fetch('https://api.github.com/search/issues?q=author:vraj826+type:issue');
+        const issuesRes = await fetch('/api/github?endpoint=issues');
         if (issuesRes.ok) {
           const issuesData = await issuesRes.json();
           if (issuesData.total_count !== undefined) {
@@ -76,7 +76,7 @@ export default function OpenSource() {
         }
 
         // Fetch Organizations count
-        const orgsRes = await fetch('https://api.github.com/users/vraj826/orgs');
+        const orgsRes = await fetch('/api/github?endpoint=orgs');
         if (orgsRes.ok) {
           const orgsData = await orgsRes.json();
           if (Array.isArray(orgsData)) {
@@ -85,7 +85,7 @@ export default function OpenSource() {
         }
 
         // Fetch public events (activity)
-        const eventsRes = await fetch('https://api.github.com/users/vraj826/events');
+        const eventsRes = await fetch('/api/github?endpoint=events');
         if (eventsRes.ok) {
           const eventsData = await eventsRes.json();
           if (Array.isArray(eventsData)) {
